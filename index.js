@@ -2,14 +2,14 @@ var YoutubeMp3Downloader = require("youtube-mp3-downloader");
 var search = require('youtube-search');
 var fs = require("fs");
 
-let pwd = '/Users/suyash/Desktop/music-dl'
+let pwd = process.cwd()
 
 var opts = {
   maxResults: 1,
   key: 'AIzaSyB6-w_xp6cU3dFjhNMxwdwqomlH1I6sMsY'
 };
 
-let dir = pwd + '/mp3/' + Date.now()
+let dir = pwd + '/' + Date.now()
 
 if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 
@@ -28,13 +28,14 @@ fs.readFile("src.txt", (err, data) => {
           if(err) return console.log(err);
           let id = results[0].id
           //Download video and save as MP3 file
+          console.log("Downloading: ", results[0].title);
           YD.download(id);
         });
     })
 });
 
 YD.on("finished", function(err, data) {
-    console.log(JSON.stringify(data));
+    console.log("Finished: ", JSON.stringify(data.file));
 });
 
 YD.on("error", function(error) {
@@ -42,5 +43,5 @@ YD.on("error", function(error) {
 });
 
 YD.on("progress", function(progress) {
-    console.log(JSON.stringify(progress));
+    // console.log(JSON.stringify(progress));
 });
